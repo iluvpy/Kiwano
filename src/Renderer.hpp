@@ -56,6 +56,6 @@ private:
     //     auto app = reinterpret_cast<Renderer*>(glfwGetWindowUserPointer(m_window.getWindowPtr()));
     //     app->framebufferResized = true;
     // }
-    void setPresent();
+    void setPresent(uint32_t imageIndex);
 
 };

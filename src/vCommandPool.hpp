@@ -4,10 +4,10 @@
 
 class vCommandPool {
 public:
-    void init(vDevice *device);
+    void init(vDevice *device, vSurface *surface);
     void destroy(vDevice *device);
-    VkCommandPool getVkcommandPool();
+    VkCommandPool getVKcommandPool();
 private:
     VkCommandPool m_commandPool;
 
-}
+};

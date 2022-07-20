@@ -8,7 +8,7 @@ class vRenderPass {
 public:
     void init(vDevice *device, vSwapChain *swapChain);
     void destroy(vDevice *device);
-    VkRenderPass getVkrenderPass();
+    VkRenderPass getVKrenderPass();
 private:
     VkRenderPass m_renderPass;
-}
+};

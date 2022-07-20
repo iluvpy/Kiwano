@@ -1,7 +1,7 @@
 #include "vPipeLine.hpp"
 
 
-void vPipeLine::init(vDevice *device) {
+void vPipeLine::init(vDevice *device, vRenderPass *renderPass) {
     auto vertShaderCode = Util::readShader(RenderConfig::VertexShaderPath);
     auto fragShaderCode = Util::readShader(RenderConfig::FragmentShaderPath);
 
@@ -101,8 +101,8 @@ void vPipeLine::init(vDevice *device) {
     pipelineInfo.pMultisampleState = &multisampling;
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = &dynamicState;
-    pipelineInfo.layout = pipelineLayout;
-    pipelineInfo.renderPass = renderPass;
+    pipelineInfo.layout = m_pipelineLayout;
+    pipelineInfo.renderPass = renderPass->getVKrenderPass();
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
@@ -132,4 +132,9 @@ VkShaderModule vPipeLine::createShaderModule(vDevice *device, const std::vector<
     }
 
     return shaderModule;
+}
+
+
+VkPipeline vPipeLine::getVKpipeLine() {
+    return m_graphicsPipeline;
 }

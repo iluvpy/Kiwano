@@ -1,8 +1,8 @@
 #include "vCommandPool.hpp"
 
 
-void vCommandPool::init(vDevice *device) {
-    QueueFamilyIndices queueFamilyIndices = Util::findQueueFamilies(device->getVkphysicalDevice());
+void vCommandPool::init(vDevice *device, vSurface *surface) {
+    QueueFamilyIndices queueFamilyIndices = Util::findQueueFamilies(device->getVKphysicalDevice(), surface);
 
     VkCommandPoolCreateInfo poolInfo{};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -20,6 +20,6 @@ void vCommandPool::destroy(vDevice *device) {
 }
 
 
-VkCommandPool vCommandPool::getVkcommandPool() {
+VkCommandPool vCommandPool::getVKcommandPool() {
     return m_commandPool;
 }

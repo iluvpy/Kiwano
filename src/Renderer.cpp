@@ -12,35 +12,35 @@ void Renderer::init() {
     m_instance.init();
     m_debugMessenger.init(&m_instance);
     m_surface.init(&m_instance, &m_window);
-    m_device.init(&m_instance);
+    m_device.init(&m_instance, &m_surface);
     m_swapChain.init(&m_device, &m_surface, &m_window);
     m_renderPass.init(&m_device, &m_swapChain);
     m_swapChain.createFramebuffers(&m_device, &m_renderPass);
-    m_commandPool.init(&m_device);
-    m_vertex.init(&m_device, vertices);
-    m_commandBuffer.init(&m_device, &m_renderPass, &m_swapChain, &m_commandPool);
+    m_commandPool.init(&m_device, &m_surface);
+    m_vertex.init(&m_device, vertices, &m_commandPool);
+    m_commandBuffer.init(&m_device, &m_renderPass, &m_swapChain, &m_commandPool, &m_pipeLine);
     m_clock.init(&m_device);
 }
 
 
 
 void Renderer::drawFrame() {
-    m_clock.waitForLastFrame();
+    m_clock.waitForLastFrame(&m_device);
 
     uint32_t imageIndex;
-    vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+    vkAcquireNextImageKHR(m_device.getVKdevice(), m_swapChain.getVKswapChain(), UINT64_MAX, m_clock.getAvailableImageSemaphore(), VK_NULL_HANDLE, &imageIndex);
 
     m_clock.reset(&m_device);
 
-    m_commandBuffer.reset();
-    m_commandBuffer.record(currentFrame, imageIndex);
+    m_commandBuffer.reset(&m_clock);
+    m_commandBuffer.record(m_clock.getCurrentFrame(), imageIndex, &m_vertex);
 
-    setPresent();
+    setPresent(imageIndex);
 
     m_clock.update();
 }
 
-void Renderer::setPresent() {
+void Renderer::setPresent(uint32_t imageIndex) {
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -51,7 +51,7 @@ void Renderer::setPresent() {
     submitInfo.pWaitDstStageMask = waitStages;
 
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = m_commandBuffer.getCommandBuffer(&m_clock);
+    submitInfo.pCommandBuffers = m_commandBuffer.getCommandBufferPtr(&m_clock);
 
     VkSemaphore signalSemaphores[] = {m_clock.getRenderFinishedSemaphore()};
     submitInfo.signalSemaphoreCount = 1;
@@ -69,7 +69,7 @@ void Renderer::setPresent() {
 
     VkSwapchainKHR swapChains[] = {m_swapChain.getVKswapChain()};
     presentInfo.swapchainCount = 1;
-    presentInfo.pSwapchains = m_swapChains;
+    presentInfo.pSwapchains = swapChains;
 
     presentInfo.pImageIndices = &imageIndex;
 
@@ -93,7 +93,7 @@ void Renderer::destroy() {
 
     m_debugMessenger.destroy(&m_instance);
 
-    m_surface.destroy();
+    m_surface.destroy(&m_instance);
     m_instance.destroy();
     m_window.destroy();
 }

@@ -48,6 +48,6 @@ void vRenderPass::destroy(vDevice *device) {
     vkDestroyRenderPass(device->getVKdevice(), m_renderPass, nullptr);
 }
 
-VkRenderPass vRenderPass::getVkrenderPass() {
+VkRenderPass vRenderPass::getVKrenderPass() {
     return m_renderPass;
 }

@@ -2,7 +2,7 @@
 
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
-
+#include <stdexcept>
 
 #include "Window.hpp"
 #include "vInstance.hpp"
@@ -17,5 +17,4 @@ private:
 
     VkSurfaceKHR m_surface;
     
-
-}
+};

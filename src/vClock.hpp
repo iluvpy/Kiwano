@@ -19,4 +19,4 @@ private:
     std::vector<VkFence> m_inFlightFences;
     uint32_t m_currentFrame = 0;
 
-}
+};

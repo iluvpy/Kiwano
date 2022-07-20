@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vulkan/vulkan.h>
+#include <algorithm>
+#include <limits>
 #include "vDevice.hpp"
 #include "vSurface.hpp"
 #include "Window.hpp"
@@ -14,6 +16,7 @@ public:
     VkFormat getFormat();
     VkExtent2D getExtent();
     VkSwapchainKHR getVKswapChain();
+    VkFramebuffer getFrameBuffer(uint32_t imageIndex);
 private:
 
     VkSwapchainKHR m_swapChain;
@@ -24,7 +27,6 @@ private:
     std::vector<VkFramebuffer> m_swapChainFramebuffers;
 
 
-    SwapChainSupportDetails vSwapChain::querySwapChainSupport(vDevice *device);
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, Window *window);
@@ -32,4 +34,4 @@ private:
     void createImageViews(vDevice *device);
     void createSwapChain(vDevice *device, vSurface *surface, Window *window);
 
-}
+};

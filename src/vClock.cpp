@@ -14,7 +14,7 @@ void vClock::init(vDevice *device) {
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-    for (size_t i = 0; i < RenderConfig::MAX_FRAMES_IN_FLIGHT i++) {
+    for (size_t i = 0; i < RenderConfig::MAX_FRAMES_IN_FLIGHT; i++) {
         if (vkCreateSemaphore(device->getVKdevice(), &semaphoreInfo, nullptr, &m_imageAvailableSemaphores[i]) != VK_SUCCESS ||
             vkCreateSemaphore(device->getVKdevice(), &semaphoreInfo, nullptr, &m_renderFinishedSemaphores[i]) != VK_SUCCESS ||
             vkCreateFence(device->getVKdevice(), &fenceInfo, nullptr, &m_inFlightFences[i]) != VK_SUCCESS) {

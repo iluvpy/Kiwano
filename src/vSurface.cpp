@@ -2,7 +2,7 @@
 
 
 void vSurface::init(vInstance *instance, Window *window) {
-    if (glfwCreateWindowSurface(instance->getVKinstance(), window->getGLFWwindow(), nullptr, &surface) != VK_SUCCESS) {
+    if (glfwCreateWindowSurface(instance->getVKinstance(), window->getGLFWwindow(), nullptr, &m_surface) != VK_SUCCESS) {
         throw std::runtime_error("failed to create window surface!");
     }
 }

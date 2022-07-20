@@ -7,14 +7,15 @@
 #include "RenderConfig.hpp"
 #include "Util.hpp"
 #include "vInstance.hpp"
+#include "vSurface.hpp"
 
 class vDevice {
 public:
-    void init(vInstance *instance);
+    void init(vInstance *instance, vSurface *surface);
     void destroy();
     VkDevice getVKdevice();
-    VkPhysicalDevice getVkphysicalDevice();
-    bool isDeviceSuitable(VkPhysicalDevice device);
+    VkPhysicalDevice getVKphysicalDevice();
+    bool isDeviceSuitable(VkPhysicalDevice device, vSurface *surface);
     VkQueue getGraphicsQueue();
     VkQueue getPresentQueue();
 
@@ -24,8 +25,6 @@ private:
     VkQueue m_graphicsQueue;
     VkQueue m_presentQueue;
     
-
-    void pickPhysicalDevice(vInstance *instance);
-    void createLogicalDevice();
-
-}
+    void pickPhysicalDevice(vInstance *instance, vSurface *surface);
+    void createLogicalDevice(vSurface *surface);
+};

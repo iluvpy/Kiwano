@@ -1,5 +1,6 @@
 #include "Util.hpp"
-
+#include "vSurface.hpp"
+#include "vDevice.hpp"
 
 namespace Util {
 
@@ -65,8 +66,33 @@ namespace Util {
         return buffer;
     }
 
+    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device, vSurface *surface) {
+        SwapChainSupportDetails details;
 
-    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, vSurface) {
+        vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface->getVKsurface(), &details.capabilities);
+
+        uint32_t formatCount;
+        vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface->getVKsurface(), &formatCount, nullptr);
+
+        if (formatCount != 0) {
+            details.formats.resize(formatCount);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface->getVKsurface(), &formatCount, details.formats.data());
+        }
+
+        uint32_t presentModeCount;
+        vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface->getVKsurface(), &presentModeCount, nullptr);
+
+        if (presentModeCount != 0) {
+            details.presentModes.resize(presentModeCount);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface->getVKsurface(), &presentModeCount, details.presentModes.data());
+        }
+
+        return details;
+    }
+
+
+
+    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, vSurface *surface) {
         QueueFamilyIndices indices;
 
         uint32_t queueFamilyCount = 0;
@@ -82,7 +108,7 @@ namespace Util {
             }
 
             VkBool32 presentSupport = false;
-            vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_surface, &presentSupport);
+            vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface->getVKsurface(), &presentSupport);
 
             if (presentSupport) {
                 indices.presentFamily = i;

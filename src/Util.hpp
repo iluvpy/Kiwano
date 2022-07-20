@@ -4,8 +4,11 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include "Structs.hpp"
 #include "RenderConfig.hpp"
+
+class vSurface;
 
 namespace Util {
     
@@ -14,7 +17,8 @@ namespace Util {
     std::vector<const char*> getRequiredExtensions();
     void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity, VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData);
-    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, vSurface);
+    QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, vSurface *surface);
     std::vector<char> readShader(const std::string& filename);
+    SwapChainSupportDetails querySwapChainSupport(VkPhysicalDevice device, vSurface *surface);
 
 }

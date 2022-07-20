@@ -1,7 +1,8 @@
 #include "vVertex.hpp"
 
-void vVertex::init(vDevice *device, std::vector<Vertex> vertices) {
+void vVertex::init(vDevice *device, std::vector<Vertex> vertices, vCommandPool *commandPool) {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
+    m_numberOfVertices = vertices.size();
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
@@ -14,7 +15,7 @@ void vVertex::init(vDevice *device, std::vector<Vertex> vertices) {
 
     createBuffer(device, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_vertexBuffer, m_vertexBufferMemory);
 
-    copyBuffer(device, stagingBuffer, m_vertexBuffer, bufferSize);
+    copyBuffer(device, commandPool, stagingBuffer, m_vertexBuffer, bufferSize);
 
     vkDestroyBuffer(device->getVKdevice(), stagingBuffer, nullptr);
     vkFreeMemory(device->getVKdevice(), stagingBufferMemory, nullptr);
@@ -22,8 +23,8 @@ void vVertex::init(vDevice *device, std::vector<Vertex> vertices) {
 }
 
 void vVertex::destroy(vDevice *device) {
-    vkDestroyBuffer(device->destroy(), m_vertexBuffer, nullptr);
-    vkFreeMemory(device->destroy(), m_vertexBufferMemory, nullptr);
+    vkDestroyBuffer(device->getVKdevice(), m_vertexBuffer, nullptr);
+    vkFreeMemory(device->getVKdevice(), m_vertexBufferMemory, nullptr);
 }
 
 
@@ -59,13 +60,14 @@ void vVertex::createBuffer(vDevice *device,
 }
     
 void vVertex::copyBuffer(vDevice *device,
+                         vCommandPool *commandPool,
                          VkBuffer srcBuffer, 
                          VkBuffer dstBuffer, 
                          VkDeviceSize size) {
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandPool = commandPool;
+    allocInfo.commandPool = commandPool->getVKcommandPool();
     allocInfo.commandBufferCount = 1;
 
     VkCommandBuffer commandBuffer;
@@ -93,13 +95,13 @@ void vVertex::copyBuffer(vDevice *device,
     vkQueueSubmit(device->getGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
     vkQueueWaitIdle(device->getGraphicsQueue());
 
-    vkFreeCommandBuffers(device->getVKdevice(), commandPool, 1, &commandBuffer);
+    vkFreeCommandBuffers(device->getVKdevice(), commandPool->getVKcommandPool(), 1, &commandBuffer);
 
 }
 
 uint32_t vVertex::findMemoryType(vDevice *device, uint32_t typeFilter, VkMemoryPropertyFlags properties) {
     VkPhysicalDeviceMemoryProperties memProperties;
-    vkGetPhysicalDeviceMemoryProperties(device->getVkphysicalDevice(), &memProperties);
+    vkGetPhysicalDeviceMemoryProperties(device->getVKphysicalDevice(), &memProperties);
     for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
         if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
             return i;
@@ -107,4 +109,14 @@ uint32_t vVertex::findMemoryType(vDevice *device, uint32_t typeFilter, VkMemoryP
     }
 
     throw std::runtime_error("failed to find suitable memory type!");
+}
+
+
+VkBuffer vVertex::getVKbuffer() {
+    return m_vertexBuffer;
+}
+
+// returns the number of vertices 
+uint32_t vVertex::getNumberOfVertices() {
+    return m_numberOfVertices;
 }

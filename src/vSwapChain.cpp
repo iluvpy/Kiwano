@@ -1,4 +1,5 @@
 #include "vSwapChain.hpp"
+#include "Util.hpp"
 
 void vSwapChain::init(vDevice *device, vSurface *surface, Window *window) {
     createSwapChain(device, surface, window);
@@ -6,7 +7,7 @@ void vSwapChain::init(vDevice *device, vSurface *surface, Window *window) {
 }
 
 void vSwapChain::createSwapChain(vDevice *device, vSurface *surface, Window *window) {
-    SwapChainSupportDetails swapChainSupport = querySwapChainSupport();
+    SwapChainSupportDetails swapChainSupport = Util::querySwapChainSupport(device->getVKphysicalDevice(), surface);
 
     VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
@@ -28,7 +29,7 @@ void vSwapChain::createSwapChain(vDevice *device, vSurface *surface, Window *win
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    QueueFamilyIndices indices = Util::findQueueFamilies(device->getVkphysicalDevice());
+    QueueFamilyIndices indices = Util::findQueueFamilies(device->getVKphysicalDevice(), surface);
     uint32_t queueFamilyIndices[] = {indices.graphicsFamily.value(), indices.presentFamily.value()};
 
     if (indices.graphicsFamily != indices.presentFamily) {
@@ -63,7 +64,7 @@ void vSwapChain::createImageViews(vDevice *device) {
     for (size_t i = 0; i < m_swapChainImages.size(); i++) {
         VkImageViewCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        createInfo.image = swapChainImages[i];
+        createInfo.image = m_swapChainImages[i];
         createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
         createInfo.format = m_swapChainImageFormat;
         createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
@@ -93,7 +94,7 @@ void vSwapChain::createFramebuffers(vDevice *device, vRenderPass *renderPass) {
 
         VkFramebufferCreateInfo framebufferInfo{};
         framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        framebufferInfo.renderPass = renderPass->getVkrenderPass();
+        framebufferInfo.renderPass = renderPass->getVKrenderPass();
         framebufferInfo.attachmentCount = 1;
         framebufferInfo.pAttachments = attachments;
         framebufferInfo.width = m_swapChainExtent.width;
@@ -148,30 +149,6 @@ VkExtent2D vSwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabili
     }
 }
 
-SwapChainSupportDetails vSwapChain::querySwapChainSupport(vDevice *device) {
-    SwapChainSupportDetails details;
-
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_surface, &details.capabilities);
-
-    uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_surface, &formatCount, nullptr);
-
-    if (formatCount != 0) {
-        details.formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_surface, &formatCount, details.formats.data());
-    }
-
-    uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_surface, &presentModeCount, nullptr);
-
-    if (presentModeCount != 0) {
-        details.presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_surface, &presentModeCount, details.presentModes.data());
-    }
-
-    return details;
-}
-
 VkFormat vSwapChain::getFormat() {
     return m_swapChainImageFormat;
 }
@@ -184,6 +161,9 @@ VkSwapchainKHR vSwapChain::getVKswapChain() {
     return m_swapChain;
 }
 
+VkFramebuffer vSwapChain::getFrameBuffer(uint32_t imageIndex) {
+    return m_swapChainFramebuffers[imageIndex];
+}
 
 
 void vSwapChain::destroy(vDevice *device)  {
@@ -195,5 +175,5 @@ void vSwapChain::destroy(vDevice *device)  {
         vkDestroyImageView(device->getVKdevice(), imageView, nullptr);
     }
 
-    vkDestroySwapchainKHR(device->getVKdevice(), swapChain, nullptr);
+    vkDestroySwapchainKHR(device->getVKdevice(), m_swapChain, nullptr);
 }

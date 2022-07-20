@@ -8,8 +8,6 @@ void Window::init() {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
     
     m_window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-    glfwSetWindowUserPointer(window, this);
-    glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
 }
 
 void Window::destroy() {
@@ -23,6 +21,6 @@ bool Window::windowOpen() {
 }
 
 
-GLFWwindow *getWindowPtr() {
+GLFWwindow *Window::getGLFWwindow() {
     return m_window;
 }
