@@ -3,8 +3,6 @@
 #include <vulkan/vulkan.h>
 #include <stdexcept>
 #include <cstring>
-#include "RenderConfig.hpp"
-#include "Util.hpp"
 
 class vInstance {
 public:

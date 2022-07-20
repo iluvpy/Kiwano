@@ -1,9 +1,10 @@
 #pragma once
 
 #include <cstring>
-#include "vDevice.hpp"
-#include "Vertex.hpp"
-#include "vCommandPool.hpp"
+#include <stdexcept>
+#include <vulkan/vulkan.h>
+#include <vector>
+#include "preDef.hpp"
 
 class vVertex {
 public:
@@ -28,16 +29,5 @@ private:
                     VkBuffer dstBuffer, 
                     VkDeviceSize size);
 
-    uint32_t findMemoryType(vDevice *device, uint32_t typeFilter, VkMemoryPropertyFlags properties) {
-        VkPhysicalDeviceMemoryProperties memProperties;
-        vkGetPhysicalDeviceMemoryProperties(device->getVKphysicalDevice(), &memProperties);
-        for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
-            if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
-                return i;
-            }
-        }
-
-        throw std::runtime_error("failed to find suitable memory type!");
-    }
-
+    uint32_t findMemoryType(vDevice *device, uint32_t typeFilter, VkMemoryPropertyFlags properties);
 };

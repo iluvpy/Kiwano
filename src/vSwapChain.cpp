@@ -1,5 +1,9 @@
 #include "vSwapChain.hpp"
 #include "Util.hpp"
+#include "vDevice.hpp"
+#include "vSurface.hpp"
+#include "Window.hpp"
+#include "vRenderPass.hpp"
 
 void vSwapChain::init(vDevice *device, vSurface *surface, Window *window) {
     createSwapChain(device, surface, window);

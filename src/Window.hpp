@@ -10,6 +10,7 @@ public:
 
     void init();
     void destroy();
+    void pollEvents();
     bool windowOpen();
     GLFWwindow *getGLFWwindow();
 

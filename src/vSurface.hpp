@@ -4,8 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 
-#include "Window.hpp"
-#include "vInstance.hpp"
+#include "preDef.hpp"
 
 class vSurface {
 public:

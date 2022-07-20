@@ -1,5 +1,7 @@
 #include "DebugMessenger.hpp"
-
+#include "vInstance.hpp"
+#include "RenderConfig.hpp"
+#include "Util.hpp"
 
 void DebugMessenger::init(vInstance *instance) {
     if (!RenderConfig::enableValidationLayers) return;

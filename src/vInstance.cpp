@@ -1,4 +1,6 @@
 #include "vInstance.hpp"
+#include "RenderConfig.hpp"
+#include "Util.hpp"
 
 void vInstance::init() {
     if (RenderConfig::enableValidationLayers && !checkValidationLayerSupport()) {

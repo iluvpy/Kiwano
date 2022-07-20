@@ -1,5 +1,6 @@
 #include "vRenderPass.hpp"
-
+#include "vDevice.hpp"
+#include "vSwapChain.hpp"
 
 void vRenderPass::init(vDevice *device, vSwapChain *swapChain) {
     VkAttachmentDescription colorAttachment{};

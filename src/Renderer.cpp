@@ -1,5 +1,5 @@
 #include "Renderer.hpp"
-
+#include "Vertex.hpp"
 
 const std::vector<Vertex> vertices = {
     {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
@@ -7,13 +7,13 @@ const std::vector<Vertex> vertices = {
     {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
 };
 
-void Renderer::init() {
-    m_window.init();
+void Renderer::init(Window *window) {
+    m_window = window;
     m_instance.init();
     m_debugMessenger.init(&m_instance);
-    m_surface.init(&m_instance, &m_window);
+    m_surface.init(&m_instance, m_window);
     m_device.init(&m_instance, &m_surface);
-    m_swapChain.init(&m_device, &m_surface, &m_window);
+    m_swapChain.init(&m_device, &m_surface, m_window);
     m_renderPass.init(&m_device, &m_swapChain);
     m_swapChain.createFramebuffers(&m_device, &m_renderPass);
     m_commandPool.init(&m_device, &m_surface);
@@ -95,5 +95,5 @@ void Renderer::destroy() {
 
     m_surface.destroy(&m_instance);
     m_instance.destroy();
-    m_window.destroy();
+    //m_window.destroy();
 }

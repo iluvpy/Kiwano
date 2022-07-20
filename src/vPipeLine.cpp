@@ -1,5 +1,8 @@
 #include "vPipeLine.hpp"
-
+#include "vDevice.hpp"
+#include "Vertex.hpp"
+#include "vRenderPass.hpp"
+#include "Util.hpp"
 
 void vPipeLine::init(vDevice *device, vRenderPass *renderPass) {
     auto vertShaderCode = Util::readShader(RenderConfig::VertexShaderPath);

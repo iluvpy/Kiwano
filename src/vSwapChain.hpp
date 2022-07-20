@@ -3,10 +3,8 @@
 #include <vulkan/vulkan.h>
 #include <algorithm>
 #include <limits>
-#include "vDevice.hpp"
-#include "vSurface.hpp"
-#include "Window.hpp"
-#include "vRenderPass.hpp"
+#include <vector>
+#include "preDef.hpp"
 
 class vSwapChain {
 public:

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "vInstance.hpp"
-#include "RenderConfig.hpp"
-#include "Util.hpp"
+#include <vulkan/vulkan.h>
+#include "preDef.hpp"
 
 class DebugMessenger {
 public:

@@ -1,5 +1,12 @@
 #include "vCommandBuffer.hpp"
-
+#include "vDevice.hpp"
+#include "vRenderPass.hpp"
+#include "vCommandPool.hpp"
+#include "vClock.hpp"
+#include "vVertex.hpp"
+#include "vPipeLine.hpp"
+#include "RenderConfig.hpp"
+#include "vSwapChain.hpp"
 
 void vCommandBuffer::init(vDevice *device, vRenderPass *renderPass, vSwapChain *swapChain, vCommandPool *commandPool, vPipeLine *pipeLine)  
 {

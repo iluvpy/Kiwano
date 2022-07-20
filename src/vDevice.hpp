@@ -3,11 +3,8 @@
 #include <vulkan/vulkan.h>
 #include <set>
 #include <vector>
-#include "Structs.hpp"
-#include "RenderConfig.hpp"
-#include "Util.hpp"
-#include "vInstance.hpp"
-#include "vSurface.hpp"
+#include <string>
+#include "preDef.hpp"
 
 class vDevice {
 public:
@@ -27,4 +24,6 @@ private:
     
     void pickPhysicalDevice(vInstance *instance, vSurface *surface);
     void createLogicalDevice(vSurface *surface);
+    bool checkDeviceExtensionSupport(VkPhysicalDevice device);
+
 };

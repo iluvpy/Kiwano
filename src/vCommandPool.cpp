@@ -1,5 +1,6 @@
 #include "vCommandPool.hpp"
-
+#include "vDevice.hpp"
+#include "Util.hpp"
 
 void vCommandPool::init(vDevice *device, vSurface *surface) {
     QueueFamilyIndices queueFamilyIndices = Util::findQueueFamilies(device->getVKphysicalDevice(), surface);

@@ -1,11 +1,8 @@
 #pragma once
 
-#include "vDevice.hpp"
-#include "vRenderPass.hpp"
-#include "vCommandPool.hpp"
-#include "vClock.hpp"
-#include "vVertex.hpp"
-#include "vPipeLine.hpp"
+#include <vulkan/vulkan.h>
+#include <vector>
+#include "preDef.hpp"
 
 class vCommandBuffer {
 public:

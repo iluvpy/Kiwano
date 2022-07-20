@@ -1,5 +1,8 @@
 #include "vClock.hpp"
-
+#include "vDevice.hpp"
+#include "RenderConfig.hpp"
+#include <stdexcept>
+#include <cinttypes>
 
 
 void vClock::init(vDevice *device) {

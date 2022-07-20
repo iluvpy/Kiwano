@@ -1,6 +1,7 @@
 #pragma once
 
-#include "vDevice.hpp"
+#include <vulkan/vulkan.h>
+#include "preDef.hpp"
 
 class vCommandPool {
 public:

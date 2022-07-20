@@ -1,8 +1,8 @@
 #pragma once
 
-#include "vDevice.hpp"
-#include "Vertex.hpp"
-#include "vRenderPass.hpp"
+#include <vulkan/vulkan.h>
+#include <vector>
+#include "preDef.hpp"
 
 class vPipeLine {
 public:

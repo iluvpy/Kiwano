@@ -1,4 +1,7 @@
 #include "vVertex.hpp"
+#include "vDevice.hpp"
+#include "Vertex.hpp"
+#include "vCommandPool.hpp"
 
 void vVertex::init(vDevice *device, std::vector<Vertex> vertices, vCommandPool *commandPool) {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();

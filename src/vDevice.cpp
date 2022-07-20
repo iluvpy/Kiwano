@@ -1,4 +1,9 @@
 #include "vDevice.hpp"
+#include "Structs.hpp"
+#include "RenderConfig.hpp"
+#include "Util.hpp"
+#include "vInstance.hpp"
+#include "vSurface.hpp"
 
 
 void vDevice::init(vInstance *instance, vSurface *surface)  {
@@ -95,7 +100,7 @@ bool vDevice::isDeviceSuitable(VkPhysicalDevice device, vSurface *surface) {
 }
 
 
-bool checkDeviceExtensionSupport(VkPhysicalDevice device) {
+bool vDevice::checkDeviceExtensionSupport(VkPhysicalDevice device) {
     uint32_t extensionCount;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 

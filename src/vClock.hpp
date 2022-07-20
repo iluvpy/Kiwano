@@ -1,6 +1,10 @@
 #pragma once
 
-#include "vDevice.hpp"
+#include <cstdlib>
+#include <vector>
+#include <cstdint>
+#include <vulkan/vulkan.h>
+#include "preDef.hpp"
 
 class vClock {
 public: 

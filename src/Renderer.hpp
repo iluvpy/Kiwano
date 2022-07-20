@@ -27,12 +27,12 @@
 
 class Renderer {
 public:
-    void init();
+    void init(Window *window);
     void destroy();
     void drawFrame();
 private:
 
-    Window m_window;
+    Window *m_window;
     vInstance m_instance;
     DebugMessenger m_debugMessenger;
     vSurface m_surface;
