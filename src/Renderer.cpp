@@ -15,6 +15,7 @@ void Renderer::init(Window *window) {
     m_device.init(&m_instance, &m_surface);
     m_swapChain.init(&m_device, &m_surface, m_window);
     m_renderPass.init(&m_device, &m_swapChain);
+    m_pipeLine.init(&m_device, &m_renderPass);
     m_swapChain.createFramebuffers(&m_device, &m_renderPass);
     m_commandPool.init(&m_device, &m_surface);
     m_vertex.init(&m_device, vertices, &m_commandPool);
