@@ -16,7 +16,11 @@ add_library(kiwano src/DebugMessenger.cpp
             src/vVertex.cpp 
             src/Window.cpp)
 
+add_executable(kiwanotest src/test.cpp)
+
 set(CXX_STANDARD 17)
+
+
 
 find_path(ourGLMLib glm NAMES glm GLM DOC "OpenGL Mathematics Library")
 find_library(ourGLFWLib glfw NAMES glfw glfw3 GLFW GLFW3 DOC "Windowing Library")
@@ -30,4 +34,12 @@ target_include_directories(kiwano PUBLIC ${ourGLMLib})
 target_include_directories(kiwano PUBLIC ${ourVulkanInclude})
 target_link_libraries(kiwano PRIVATE ${ourGLFWLib})
 target_link_libraries(kiwano PRIVATE ${ourVulkanLib})
+
+
+target_include_directories(kiwanotest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/Kiwano)
+target_include_directories(kiwanotest PUBLIC ${ourGLFWinclude})
+target_include_directories(kiwanotest PUBLIC ${ourGLMLib})
+target_include_directories(kiwanotest PUBLIC ${ourVulkanInclude})
+target_link_libraries(kiwanotest PRIVATE kiwano)
+
 
