@@ -2,9 +2,14 @@
 #include "Vertex.hpp"
 
 const std::vector<Vertex> vertices = {
-    {{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
-    {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
+    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
+    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+};
+
+const std::vector<uint16_t> indices = {
+    0, 1, 2, 2, 3, 0
 };
 
 void Renderer::init(Window *window) {
@@ -18,7 +23,7 @@ void Renderer::init(Window *window) {
     m_pipeLine.init(&m_device, &m_renderPass);
     m_swapChain.createFramebuffers(&m_device, &m_renderPass);
     m_commandPool.init(&m_device, &m_surface);
-    m_vertex.init(&m_device, vertices, &m_commandPool);
+    m_vertex.init(&m_device, vertices, indices, &m_commandPool);
     m_commandBuffer.init(&m_device, &m_renderPass, &m_swapChain, &m_commandPool, &m_pipeLine);
     m_clock.init(&m_device);
 }

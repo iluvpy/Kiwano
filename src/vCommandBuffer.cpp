@@ -79,11 +79,14 @@ void vCommandBuffer::record(uint32_t currentFrame, uint32_t imageIndex, vVertex 
 
         vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeLine->getVKpipeLine());
 
-        VkBuffer vertexBuffers[] = {vertex->getVKbuffer()};
+        VkBuffer vertexBuffers[] = {vertex->getVertexVKbuffer()};
         VkDeviceSize offsets[] = {0};
+
         vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
 
-        vkCmdDraw(commandBuffer, vertex->getNumberOfVertices(), 1, 0, 0);
+        vkCmdBindIndexBuffer(commandBuffer, vertex->getIndeciesVKBuffer(), 0, VK_INDEX_TYPE_UINT16);
+
+        vkCmdDrawIndexed(commandBuffer, vertex->getNumberOfIndecies(), 1, 0, 0, 0);
 
     vkCmdEndRenderPass(commandBuffer);
 

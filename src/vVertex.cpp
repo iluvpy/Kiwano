@@ -3,9 +3,10 @@
 #include "Vertex.hpp"
 #include "vCommandPool.hpp"
 
-void vVertex::init(vDevice *device, std::vector<Vertex> vertices, vCommandPool *commandPool) {
+void vVertex::init(vDevice *device, std::vector<Vertex> vertices, std::vector<uint16_t> indices, vCommandPool *commandPool) {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
     m_numberOfVertices = vertices.size();
+    m_numberOfIndecies = indices.size();
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
@@ -23,9 +24,31 @@ void vVertex::init(vDevice *device, std::vector<Vertex> vertices, vCommandPool *
     vkDestroyBuffer(device->getVKdevice(), stagingBuffer, nullptr);
     vkFreeMemory(device->getVKdevice(), stagingBufferMemory, nullptr);
 
+    // index buffer
+
+    bufferSize = sizeof(indices[0]) * indices.size();
+
+    createBuffer(device, bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+    vkMapMemory(device->getVKdevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+    memcpy(data, indices.data(), (size_t) bufferSize);
+    vkUnmapMemory(device->getVKdevice(), stagingBufferMemory);
+
+    createBuffer(device, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_indexBuffer, m_indexBufferMemory);
+
+    copyBuffer(device, commandPool, stagingBuffer, m_indexBuffer, bufferSize);
+
+    vkDestroyBuffer(device->getVKdevice(), stagingBuffer, nullptr);
+    vkFreeMemory(device->getVKdevice(), stagingBufferMemory, nullptr);
+
+
 }
 
 void vVertex::destroy(vDevice *device) {
+
+    vkDestroyBuffer(device->getVKdevice(), m_indexBuffer, nullptr);
+    vkFreeMemory(device->getVKdevice(), m_indexBufferMemory, nullptr);
+
     vkDestroyBuffer(device->getVKdevice(), m_vertexBuffer, nullptr);
     vkFreeMemory(device->getVKdevice(), m_vertexBufferMemory, nullptr);
 }
@@ -115,11 +138,20 @@ uint32_t vVertex::findMemoryType(vDevice *device, uint32_t typeFilter, VkMemoryP
 }
 
 
-VkBuffer vVertex::getVKbuffer() {
+VkBuffer vVertex::getVertexVKbuffer() {
     return m_vertexBuffer;
 }
+
+VkBuffer vVertex::getIndeciesVKBuffer() {
+    return m_indexBuffer;
+}
+
 
 // returns the number of vertices 
 uint32_t vVertex::getNumberOfVertices() {
     return m_numberOfVertices;
+}
+
+uint32_t vVertex::getNumberOfIndecies() {
+    return m_numberOfIndecies;
 }
